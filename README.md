@@ -1,0 +1,2 @@
+Este es el repositorio donde se desarrollo el prototipo de la aplicacion Consciente-te en su version mobile, Para dispositivos Android, en este desarrollo trabajamos con la tecnologia de JetPack-Compose ofrecida por andoid,el sdk sobre el cual fue desarrollado es
+*minSdk = 34 ,targetSdk = 34*.Para correr el codigo necesitara la ultima version de Android Studio e instalar las dependencias de Gradle.
