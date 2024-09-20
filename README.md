@@ -1,3 +1,0 @@
-# Ux
-
-Para mobile
