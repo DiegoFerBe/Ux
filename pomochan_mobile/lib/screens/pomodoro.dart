@@ -14,13 +14,14 @@ class PomodoroPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  top: 10.0), // Adds space for the floating button
+                  top: 80.0), // Adds space for the floating button
               child: Column(
                 //padding: const EdgeInsets.all(16.0),
                 children: [
                   const Pomodorotimer(
                     color1: Color.fromRGBO(117, 134, 148, 1.000),
                     color2: Color.fromRGBO(224, 122, 95, 1.000),
+                    textColor: Color.fromRGBO(247, 231, 220, 1),
                   ),
                   FilledButton(
                     child: Text("Modo concentración"),

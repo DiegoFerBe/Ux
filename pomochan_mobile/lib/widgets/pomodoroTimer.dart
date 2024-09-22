@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class Pomodorotimer extends StatefulWidget {
   final Color color1; // Color when not pressed
   final Color color2; // Color when pressed
+  final Color textColor;
 
   const Pomodorotimer({
     super.key,
     required this.color1,
     required this.color2,
+    required this.textColor
   });
 
   @override
@@ -31,7 +33,7 @@ class _PomodorotimerState extends State<Pomodorotimer> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: 350, // Diameter of the button
-          height: 500,
+          height: 400,
           decoration: BoxDecoration(
             color: _isPressed ? widget.color2 : widget.color1, // Use colors from parent
             shape: BoxShape.circle,
@@ -48,7 +50,7 @@ class _PomodorotimerState extends State<Pomodorotimer> {
             child: Text(
               _isPressed ? "25:00 min" : "Iniciar",
               style: TextStyle(
-                color: Colors.white,
+                color: widget.textColor,
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
               ),
