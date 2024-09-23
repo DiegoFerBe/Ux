@@ -13,8 +13,7 @@ class _SignUpState extends State<SignUp> {
   final List<TextEditingController> _controllers =
       List.generate(4, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
-  final List<String> _inputValues = List.filled(4, ''); // Track input values
-
+  
   @override
   void dispose() {
     // Clean up controllers and focus nodes when the widget is disposed
@@ -32,9 +31,9 @@ class _SignUpState extends State<SignUp> {
     if (allFilled) {
       print('All 4 digits have been entered: ${_controllers.map((c) => c.text).join()}');
       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const PomodoroFocusPage()),
-                      );
+        context,
+        MaterialPageRoute(builder: (context) => const PomodoroFocusPage()),
+      );
     }
   }
 
@@ -57,10 +56,25 @@ class _SignUpState extends State<SignUp> {
                 'Modo concentración',
                 textAlign: TextAlign.center, // Center the text
                 style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 55,
+                  fontWeight: FontWeight.normal,
                   height: 0.8,
-                  color: Colors.white, // White title color
+                  letterSpacing: 1,
+                  color: Color.fromRGBO(247, 231, 220, 1), // White title color
+                ),
+              ),
+            ),
+            const SizedBox(height: 10), // Space between title and input
+            const Center(
+              child: Text(
+                'Sincroniza tus datos en la nube y mejora tu productividad con analisis de IA',
+                textAlign: TextAlign.center, // Center the text
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  height: 0.8,
+                  letterSpacing: 1,
+                  color: Color.fromRGBO(247, 231, 220, 1), // White title color
                 ),
               ),
             ),
@@ -80,7 +94,7 @@ class _SignUpState extends State<SignUp> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 24,
-                        color: Colors.white,
+                        color: Color.fromRGBO(247, 231, 220, 1),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly, // Only numbers
@@ -89,19 +103,18 @@ class _SignUpState extends State<SignUp> {
                         counterText: "", // Hide character counter
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.white,
+                            color: Color.fromRGBO(247, 231, 220, 1),
                             width: 2.0, // Line thickness
                           ),
                         ),
                         focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.white, // Line color when focused
+                            color: Color.fromRGBO(247, 231, 220, 1), // Line color when focused
                             width: 3.0, // Thicker line
                           ),
                         ),
                       ),
                       onChanged: (value) {
-                        _inputValues[index] = value; // Update input value
                         if (value.isNotEmpty && index < 3) {
                           // Move focus to the next text field
                           FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
@@ -118,32 +131,20 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             const SizedBox(height: 100), // Space between input and icon
-            // Asterisks display
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(4, (index) {
-                return Text(
-                  _inputValues[index].isNotEmpty ? '*' : '', // Show asterisk if filled
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                );
-              }),
-            ),
+            // The asterisks display logic has been removed.
             // Show fingerprint icon only when keyboard is not visible
             if (!isKeyboardVisible)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: IconButton(
                   icon: const Icon(Icons.fingerprint),
-                  color: Colors.white,
+                  color: Color.fromRGBO(247, 231, 220, 1),
                   iconSize: 70,
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const PomodoroFocusPage()),
-                      );
+                      context,
+                      MaterialPageRoute(builder: (context) => const PomodoroFocusPage()),
+                    );
                   },
                 ),
               ),

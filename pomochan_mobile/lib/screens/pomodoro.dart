@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pomochan_mobile/screens/signUp.dart';
 import 'package:pomochan_mobile/widgets/pomodoroTimer.dart';
 
-
 class PomodoroPage extends StatelessWidget {
   const PomodoroPage({super.key});
 
@@ -23,8 +22,8 @@ class PomodoroPage extends StatelessWidget {
                     color2: Color.fromRGBO(224, 122, 95, 1.000),
                     textColor: Color.fromRGBO(247, 231, 220, 1),
                   ),
+                  const SizedBox(height: 30), // Space between title and list
                   FilledButton(
-                    child: Text("Modo concentración"),
                     onPressed: () => {
                       Navigator.push(
                         context,
@@ -35,16 +34,18 @@ class PomodoroPage extends StatelessWidget {
                       backgroundColor: MaterialStateProperty.all(
                         Color.fromRGBO(117, 134, 148, 1.000),
                       ),
-                      textStyle: MaterialStateProperty.all(
-                        const TextStyle(
-                          fontSize: 24, // Set font size
-                          fontWeight:
-                              FontWeight.bold, // Set font weight (optional)
-                        ),
-                      ),
                       padding: MaterialStateProperty.all(
                         const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 25.0),
+                            horizontal: 25, vertical: 20.0),
+                      ),
+                    ),
+                    child: Text(
+                      "Modo concentración",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.normal,
+                        letterSpacing:1,
+                        color: Color.fromRGBO(247, 231, 220, 1)
                       ),
                     ),
                   )

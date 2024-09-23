@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomochan_mobile/screens/alarm.dart';
 import 'package:pomochan_mobile/screens/pomodoro.dart';
 import 'package:pomochan_mobile/widgets/navigationBar.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,11 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PomoChan',
       theme: ThemeData(
-        primaryColor: Colors.blue, // Primary Color (Blue)
+        textTheme: GoogleFonts.fenixTextTheme(Theme.of(context).textTheme),
+        primaryColor: Color(0xFF405D72), // Primary Color (Blue)
         scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),// Background Color (Light Gray)
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Color.fromARGB(255, 240, 240, 240)),
-         ),
        ), // Text Color (Dark Blue)
       home: const PomoChan(),
     );

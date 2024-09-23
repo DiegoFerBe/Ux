@@ -52,7 +52,7 @@ class _PomodorotimerState extends State<Pomodorotimer> {
               style: TextStyle(
                 color: widget.textColor,
                 fontSize: 50,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.normal,
               ),
             ),
           ),

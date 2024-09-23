@@ -61,8 +61,8 @@ class _AlarmItemState extends State<AlarmItem> {
             child: Text(
               widget.time,
               style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+                fontSize: 25.0,
+                fontWeight: FontWeight.normal,
                 color: Color.fromRGBO(108, 107, 107, 1.000),
               ),
             ),
