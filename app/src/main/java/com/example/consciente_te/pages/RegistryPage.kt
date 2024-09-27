@@ -38,6 +38,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,244 +53,200 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+
 @Composable
 fun RegistryPage(
     onClickCancelButton: () -> Unit = {},
     onSignUpButton: ()->Unit={}
 ){
+    // State to control the visibility of the first and second parts of the form
+    var showFirstPart by remember { mutableStateOf(true) }
+
+    // State variables for first part of the form
+    val textStateName = remember { mutableStateOf(TextFieldValue()) }
+    val textStateAge = remember { mutableStateOf(TextFieldValue()) }
+    val textStateProfession = remember { mutableStateOf(TextFieldValue()) }
+
+    // State variables
+    var selectedActivity by remember { mutableStateOf("") }
+    var timeInMinutes by remember { mutableStateOf("") }
+    var selectedTimeSlot by remember { mutableStateOf("") }
+
+    // State for dropdown menus
+    var expandedActivity by remember { mutableStateOf(false) }
+    var expandedTimeSlot by remember { mutableStateOf(false) }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize(),
-    ){
-        val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
-        val (focusRequester) = FocusRequester.createRefs()
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val focusManager = LocalFocusManager.current
-        TextField(
-            value = textStateUsername.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStateUsername.value = newValue // actualiza el valor del estado cuando cambia el texto
-            },
-            label = { Text("Name") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = {
-                // Cuando se presiona "Siguiente", se enfoca el siguiente campo de texto
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            // indica que el campo de texto debe ser de una sola línea
-            // otras propiedades como placeholder, enabled, isError, etc.
-        )
-        Row(
-            modifier = Modifier.width(277.dp),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            Text(
-                text = "Enter your name", // Texto del label
-                color = Color.Gray, // Color del texto
-                fontSize = 12.sp, // Tamaño del texto
-                textAlign = TextAlign.Left,
-                // Agrega un espacio desde el borde izquierdo
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        if (showFirstPart) {
+            // First part of the form
+            TextField(
+                value = textStateName.value,
+                onValueChange = { textStateName.value = it },
+                label = { Text("Nombre") },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-        }
-        val textStateEmail = remember { mutableStateOf(TextFieldValue()) }
-        var isEmailValid by remember { mutableStateOf(true) }
-        Spacer(modifier = Modifier.height(30.dp))
-        TextField(
-            value = textStateEmail.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStateEmail.value = newValue
-                isEmailValid=isValidEmail(newValue.text)
-
-                 // actualiza el valor del estado cuando cambia el texto
-            },
-            isError = !isEmailValid,
-            label = { Text("Email") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = {
-                // Cuando se presiona "Siguiente", se enfoca el siguiente campo de texto
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            // indica que el campo de texto debe ser de una sola línea
-            // otras propiedades como placeholder, enabled, isError, etc.
-        )
-        Row(
-            modifier = Modifier.width(277.dp),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            Column {
-                if (!isEmailValid) {
-                    Text(
-                        text = "Invalid Email",
-                        color = Color.Red,
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Left,
-                    )
-                }else{
-                    Text(
-                        text = "Enter a valid email", // Texto del label
-                        color = Color.Gray, // Color del texto
-                        fontSize = 12.sp, // Tamaño del texto
-                        textAlign = TextAlign.Left,
-                        // Agrega un espacio desde el borde izquierdo
-                    )
-                }
-
-
+            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
+                Text(text = "Ingresa tu nombre", color = Color.Gray, fontSize = 12.sp)
             }
 
-        }
+            Spacer(modifier = Modifier.height(30.dp))
 
-        val textStatePassword = remember { mutableStateOf(TextFieldValue()) }
-        var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-        Spacer(modifier = Modifier.height(30  .dp))
-        TextField(
-            value = textStatePassword.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStatePassword.value = newValue // actualiza el valor del estado cuando cambia el texto
-            },
-            label = { Text("Password") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            // indica que el campo de texto debe ser de una sola línea
-            // otras propiedades como placeholder, enabled, isError, etc.
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = {
-                // Cuando se presiona "Siguiente", se enfoca el siguiente campo de texto
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-        )
-        Row(
-            modifier = Modifier.width(277.dp),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            Text(
-                text = "Enter your password", // Texto del label
-                color = Color.Gray, // Color del texto
-                fontSize = 12.sp, // Tamaño del texto
-                textAlign = TextAlign.Left,
-
-                // Agrega un espacio desde el borde izquierdo
+            TextField(
+                value = textStateAge.value,
+                onValueChange = { textStateAge.value = it },
+                label = { Text("Edad") },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-        }
-
-        val textStatePasswordConf = remember { mutableStateOf(TextFieldValue()) }
-        var validPassword by remember { mutableStateOf(true) }
-        Spacer(modifier = Modifier.height(30  .dp))
-        TextField(
-            value = textStatePasswordConf.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStatePasswordConf.value = newValue // actualiza el valor del estado cuando cambia el texto
-                validPassword=validatePassword(newValue.text,textStatePassword.value.text)
-                            },
-            label = { Text("Confirm your Password") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            isError=!validPassword,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = {
-                // Cuando se presiona "Siguiente", se enfoca el siguiente campo de texto
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            trailingIcon = {
-                val image = if (passwordVisible)
-                    Icons.Filled.Visibility
-                else Icons.Filled.VisibilityOff
-
-                // Please provide localized description for accessibility services
-                val description = if (passwordVisible) "Hide password" else "Show password"
-
-                IconButton(onClick = {passwordVisible = !passwordVisible}){
-                    Icon(imageVector  = image, description)
-                }
-            }
-        )
-        Row(
-            modifier = Modifier.width(277.dp),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            if(!validPassword){
-                Text(
-                    text = "Password Doesnt Match", // Texto del label
-                    color = Color.Red, // Color del texto
-                    fontSize = 12.sp, // Tamaño del texto
-                    textAlign = TextAlign.Left,
-
-                    // Agrega un espacio desde el borde izquierdo
-                )
-            }else{
-                Text(
-                    text = "Confirm your password", // Texto del label
-                    color = Color.Gray, // Color del texto
-                    fontSize = 12.sp, // Tamaño del texto
-                    textAlign = TextAlign.Left,
-
-                    // Agrega un espacio desde el borde izquierdo
-                )
+            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
+                Text(text = "Ingresa tu edad", color = Color.Gray, fontSize = 12.sp)
             }
 
-        }
+            Spacer(modifier = Modifier.height(30.dp))
 
-        val textStateAddress = remember { mutableStateOf(TextFieldValue()) }
-        Spacer(modifier = Modifier.height(30  .dp))
-        TextField(
-            value = textStateAddress.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStateAddress.value = newValue // actualiza el valor del estado cuando cambia el texto
-            },
-            label = { Text("Address") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                // Cuando se presiona "Siguiente", se enfoca el siguiente campo de texto
-                keyboardController?.hide()
-            }),
-            // indica que el campo de texto debe ser de una sola línea
-            // otras propiedades como placeholder, enabled, isError, etc.
-        )
-        Row(
-            modifier = Modifier.width(277.dp),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            Text(
-                text = "Enter your address", // Texto del label
-                color = Color.Gray, // Color del texto
-                fontSize = 12.sp, // Tamaño del texto
-                textAlign = TextAlign.Left,
-
-                // Agrega un espacio desde el borde izquierdo
+            TextField(
+                value = textStateProfession.value,
+                onValueChange = { textStateProfession.value = it },
+                label = { Text("Profesión") },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-        }
-        Spacer(modifier = Modifier.height(30  .dp))
-        Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier.width(277.dp))
-        Spacer(modifier = Modifier.height(30  .dp))
-        Row(
-            horizontalArrangement=Arrangement.End,
-            modifier=Modifier.width(277.dp)
-        ){
+            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
+                Text(text = "Ingresa tu profesión", color = Color.Gray, fontSize = 12.sp)
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            // Button to continue to the second part of the form
             VinylsButton(
-                onClick = onClickCancelButton ,
-                type = ButtonType.SECONDARY,
-                label = "Cancel",
+                onClick = { showFirstPart = false },
+                type = ButtonType.PRIMARY,
+                label = "Continuar"
             )
-            Spacer(modifier = Modifier.width(5  .dp))
+            VinylsButton(
+                label = "Cancelar",
+                onClick = onClickCancelButton,
+                type = ButtonType.TERTIARY,
+
+            )
+        } else {
+
+                // Dropdown for activity selection
+                Text("Seleccionar actividad:")
+                ExposedDropdownMenuBox(
+                    expanded = expandedActivity,
+                    onExpandedChange = { expandedActivity = !expandedActivity }
+                ) {
+                    TextField(
+                        readOnly = true,
+                        value = selectedActivity,
+                        onValueChange = { /* No-op */ },
+                        label = { Text("Seleccione una actividad") },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedActivity)
+                        }
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedActivity,
+                        onDismissRequest = { expandedActivity = false }
+                    ) {
+                        listOf("Estudio", "Lectura", "Trabajo").forEach { activity ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedActivity = activity
+                                    expandedActivity = false
+                                }
+                                ,text={Text(activity)}
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Input for time in minutes
+
+                TextField(
+                    label = { Text("Tiempo (minutos)") },
+                    value = timeInMinutes,
+                    onValueChange = { timeInMinutes = it },
+                    placeholder = { Text("Ingrese tiempo en minutos") }
+                )
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+                // Dropdown for time slot selection
+                Text("Seleccionar franja:")
+                ExposedDropdownMenuBox(
+                    expanded = expandedTimeSlot,
+                    onExpandedChange = { expandedTimeSlot = !expandedTimeSlot }
+                ) {
+                    TextField(
+                        readOnly = true,
+                        value = selectedTimeSlot,
+                        onValueChange = { /* No-op */ },
+                        label = { Text("Seleccione una franja") },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTimeSlot)
+                        }
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedTimeSlot,
+                        onDismissRequest = { expandedTimeSlot = false }
+                    ) {
+                        listOf("Diurno", "Tarde", "Nocturno").forEach { timeSlot ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedTimeSlot = timeSlot
+                                    expandedTimeSlot = false
+                                }
+                                ,text={Text(timeSlot)}
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Display selected values
+
             VinylsButton(
                 onClick = onSignUpButton,
                 type = ButtonType.PRIMARY,
-                label = "Sign up" ,
-
+                label = "Guardar"
             )
+            VinylsButton(
+                label = "Cancelar",
+                onClick = onClickCancelButton,
+                type = ButtonType.TERTIARY,
+
+                )
+
         }
 
+
+
+
+
+
+        }
     }
-}
+
 @Preview(showBackground = true)
 @Composable
 fun RegistryPrev(){

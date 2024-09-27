@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 enum class ButtonType {
-    PRIMARY, SECONDARY, TERTIARY, ALTERNATIVE,
+    PRIMARY, SECONDARY, TERTIARY, ALTERNATIVE,WHITE
 
 }
 
@@ -73,13 +73,14 @@ fun VinylsButton(
         contentPadding = padding,
         onClick = onClick, colors = ButtonDefaults.buttonColors(
             containerColor = when (type) {
-                ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
-                ButtonType.ALTERNATIVE -> MaterialTheme.colorScheme.primaryContainer
+                ButtonType.PRIMARY -> Color(0xFF405D72)
+                ButtonType.ALTERNATIVE -> Color(0xFF758694)
+                ButtonType.WHITE->Color.White
                 else -> Color.Transparent
             }, contentColor = when (type) {
                 ButtonType.PRIMARY -> White
-                ButtonType.ALTERNATIVE -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.primary
+                ButtonType.ALTERNATIVE -> Color(0xFF405D72)
+                else -> Color(0xFF405D72)
             }
         ),
         shape = shape,
@@ -97,8 +98,8 @@ fun ButtonContent(icon: ImageVector?, label: String?, type: ButtonType) {
     if (icon != null) {
         val color = when (type) {
             ButtonType.PRIMARY -> White
-            ButtonType.ALTERNATIVE -> MaterialTheme.colorScheme.tertiary
-            else -> MaterialTheme.colorScheme.primary
+            ButtonType.ALTERNATIVE -> Color(0xFFF7E7DC)
+            else -> Color(0xFF405D72)
         }
 
         Icon(
@@ -156,6 +157,7 @@ fun VinylsButtonPreview() {
                     .height(48.dp)
             )
             Spacer(Modifier.height(5.dp))
+
             VinylsButton(
                 icon = Icons.Outlined.Create,
                 onClick = { /*TODO*/ },
@@ -166,6 +168,16 @@ fun VinylsButtonPreview() {
             )
             Spacer(Modifier.height(5.dp))
 
+            Spacer(Modifier.height(5.dp))
+            VinylsButton(
+                icon = Icons.Outlined.Add,
+                onClick = { /*TODO*/ },
+                type = ButtonType.SECONDARY,
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+            )
+            Spacer(Modifier.height(5.dp))
 
         }
     }

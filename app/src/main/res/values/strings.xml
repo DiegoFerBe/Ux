@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Consciente-te</string>
-    <string name="home_title">Consciente-te</string>
-    <string name="create_account">Create account</string>
-    <string name="health_tittle">Health content</string>
-    <string name="create_task">Create Task</string>
-    <string name="create_alarm">Create Alarm</string>
-    <string name="associate_alarm">Associate Alarm</string>
-    <string name="list_alarms">List Alarm</string>
-    <string name="select_action">Select an Action</string>
+    <string name="app_name">Pomo-Chan</string>
+    <string name="home_title">Pomo-Chan</string>
+    <string name="create_account">Configurar Perfil</string>
+    <string name="health_tittle">Pomodoro Basico</string>
+    <string name="create_task">Modo concentración</string>
+    <string name="create_alarm">Perfil concentración</string>
+    <string name="associate_alarm">Configurar pomodoro</string>
+    <string name="list_alarms">Configurar pomodoro</string>
+    <string name="select_action">Seleccionar acción</string>
 
     <string name="catalogue_album_title">Álbumes</string>
     <string name="artist_title">Artistas</string>

@@ -3,9 +3,11 @@ package com.example.consciente_te.navigation
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -16,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -29,6 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -90,7 +95,7 @@ fun AppNavigation (
                             viewModel.logIn(User.Collector)
                         },
                         onClickforgetButton = {
-                            navController.navigate(route = AppPages.Registry.route)
+                            navController.navigate(route = AppPages.ListAlarm.route)
                             viewModel.inRegistry(User.Guest)
                         }
                     )
@@ -99,11 +104,11 @@ fun AppNavigation (
                     viewModel.setIconMenu(null)
                     RegistryPage(
                         onClickCancelButton={
-                            navController.navigate(route = AppPages.HomePage.route)
+                            navController.navigate(route = AppPages.CreateAlarm.route)
                             viewModel.logIn(User.Collector)
                         },
                         onSignUpButton={
-                            navController.navigate(route = AppPages.MediaPage.route)
+                            navController.navigate(route = AppPages.CreateAlarm.route)
                             viewModel.logIn(User.Collector)
                         }
                     )
@@ -111,6 +116,18 @@ fun AppNavigation (
                 composable(route = AppPages.MediaPage.route) {
                     viewModel.setIconMenu(Icons.Filled.Menu)
                     MediaPage(
+                        onClickIngressButton = {
+                            navController.navigate(route = AppPages.MediaPage.route)
+                            viewModel.logIn(User.Collector)
+                        },
+                        onClickforgetButton = {
+                            navController.navigate(route = AppPages.HomePage.route)
+                            viewModel.inRegistry(User.Guest)
+                        },
+                        onClickConcentrateButton={
+                            navController.navigate(route = AppPages.CreateTask.route)
+                            viewModel.inRegistry(User.Guest)
+                        }
                     )
                 }
                 composable(route = AppPages.CreateTask.route) {
@@ -121,21 +138,18 @@ fun AppNavigation (
                             viewModel.logIn(User.Collector)
                         },
                         onSaveButton={
-                            navController.navigate(route = AppPages.MediaPage.route)
+                            navController.navigate(route = AppPages.CreateAlarm.route)
                             viewModel.logIn(User.Collector)
-                            Toast.makeText(context,"Task created successful",Toast.LENGTH_LONG).show()
+                            Toast.makeText(context,"Notificaciones desativadas!",Toast.LENGTH_LONG).show()
                         }
                     )
                 }
                 composable(route = AppPages.CreateAlarm.route) {
                     viewModel.setIconMenu(Icons.Filled.Menu)
                     CreateAlarmPage(
-                        onClickCancelButton={
-                            navController.navigate(route = AppPages.MediaPage.route)
-                            viewModel.logIn(User.Collector)
-                        },
+
                         onSaveButton={
-                            navController.navigate(route = AppPages.ListAlarm.route)
+                            navController.navigate(route = AppPages.Registry.route)
                             viewModel.logIn(User.Collector)
                             Toast.makeText(context,"Alarm created successful",Toast.LENGTH_LONG).show()
 
@@ -271,3 +285,5 @@ fun NavigationIcon(
         )
     }
 }
+
+

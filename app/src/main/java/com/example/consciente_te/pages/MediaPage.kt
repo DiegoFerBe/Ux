@@ -5,122 +5,223 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessAlarm
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.example.consciente_te.R
+import com.example.consciente_te.components.ButtonType
+import com.example.consciente_te.components.VinylsButton
 
 @Composable
-fun MediaPage(){
-    val cards = listOf(
-        CardItem(
-            imageUrl ="https://media.cnn.com/api/v1/images/stellar/prod/220531190304-woman-meditation-stock.jpg?c=original",
-            title = "Meditation",
-            description = "Stretching exercises to improve everything related to concentration.",
-                    videoUrl = "https://www.youtube.com/watch?v=IShkpOm63gg"
-        ),
-        CardItem(
-            imageUrl ="https://media.glamour.mx/photos/642c5305347cb2132003b34a/16:9/w_2560%2Cc_limit/yoga_y_estiramientos_diferencias.jpg",
-            title = "Yoga",
-            description = "Yoga exercises for stress and depression management."
-            ,
-            videoUrl = "https://www.youtube.com/watch?v=zn6ostiHX0U"
-        ),
-        CardItem(
-            imageUrl ="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41407-022-0859-1/MediaObjects/41407_2022_859_Fig1_HTML.jpg",
-            title = "Breathing",
-            description = "Breathing exercises for control of the anxiety.",
-            videoUrl = "https://www.youtube.com/watch?v=oeOXoK67ewE"
-        ),
-        CardItem(
-            imageUrl ="https://static.vecteezy.com/system/resources/thumbnails/017/776/465/small/woman-during-a-mental-therapy-session-with-a-psychotherapist-or-psychologist-two-women-are-sitting-and-talking-mental-health-concept-illustration-vector.jpg",
-            title = "Psychological session",
-            description = "Therapeutic session with health professional.",
-            videoUrl = "https://www.youtube.com/watch?v=RiGIvbHpluE"
-        ),
-        CardItem(
-            imageUrl ="hhttps://www.flimp.net/wp-content/uploads/2022/05/improve-mental-health-workplace-five-ways.png",
-            title = "Improve Mental Health",
-            description = "Five Free Ways to Improve Mental Health In Your Workplace.",
-            videoUrl = "https://www.youtube.com/watch?v=1qq7lDL-bzY"
-        )
+fun MediaPage(
 
-
-    )
-
-    LazyColumn {
-
-
-        items(cards){ card ->
-            Spacer(modifier = Modifier.height(16.dp))
-            StackedCard(card = card)
-
-        }
-
-    }
-}
-
-@Composable
-fun StackedCard(card: CardItem) {
-    val context = LocalContext.current
-    Card(
+    onClickIngressButton: () -> Unit = {},
+    onClickforgetButton: () -> Unit = {},
+    onClickConcentrateButton : ()->Unit={}
+){
+    val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var isStarted by remember { mutableStateOf(false) }
+    var timeElapsed by remember { mutableStateOf(0) }
+    Spacer(modifier = Modifier.height(60.dp))
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp).clickable {
-               openVideo(context,card.videoUrl)
-            },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        )
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        Row(
+        VinylsButton(
+            icon = Icons.Outlined.Settings,
+            onClick = onClickforgetButton,
+            type = ButtonType.PRIMARY,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .width(48.dp)
+                .height(48.dp)
+                .align(Alignment.End)
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+
+
+            Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+
+            // Centrar el contenido
         ) {
-            Image(
-                rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(data = card.imageUrl)
-                        .allowHardware(false)
-                        .build()
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(150.dp)
-                    .padding(5.dp)
-            )
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier=Modifier.fillMaxWidth(),
+                 // Centra horizontalmente
+                horizontalAlignment = Alignment.CenterHorizontally, // Centrar el contenido del Column
+                // Centrar verticalmente
             ) {
-                Text(text = card.title, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = card.description)
+                // Círculo grande con texto "Iniciar"
+                Box(
+                    modifier = Modifier
+                        .size(320.dp) // Tamaño del círculo
+                        .background(
+                            if (isStarted) Color(0xFFE07A5F) else Color(0xFF758694),
+                            shape = CircleShape
+                        )
+                        .clickable {
+                            isStarted = !isStarted
+                            if (isStarted) {
+                                timeElapsed = 0
+                                // Simular incremento del tiempo (puedes agregar tu lógica de temporizador aquí)
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isStarted) "Tiempo: 25:00" else "Iniciar", // Muestra tiempo si está iniciado
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                // Espacio entre el círculo y el botón
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Botón debajo del círculo
+                VinylsButton(
+                    label = "Modo Concentración",
+                    onClick = onClickConcentrateButton,
+                    type = ButtonType.PRIMARY,
+                    modifier = Modifier.width(300.dp)
+                )
             }
         }
+
+
+
+
+
+
     }
+    Column {
+        Spacer(modifier = Modifier.weight(1f))
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF758694))
+                .height(100.dp)
+                .padding(0.dp)
+        ) {
+            Spacer(Modifier.height(5.dp))
+
+            Column(
+                modifier=Modifier.width(80.dp)
+            ) {
+                VinylsButton(
+                    icon = Icons.Outlined.AccessAlarm,
+                    onClick = onClickforgetButton,
+                    type = ButtonType.ALTERNATIVE,
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(48.dp)
+                        .zIndex(1f)
+                )
+                Spacer(Modifier.height(10.dp))
+
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) { // Centra el contenido del Box
+                    Divider(
+                        color = Color.White,
+                        thickness = 5.dp,
+                        modifier = Modifier
+                            .width(70.dp)
+                            .padding(horizontal = 5.dp) // 5dp de padding a cada lado
+                    )
+                }
+            }
+
+            Column(
+                modifier=Modifier.width(80.dp)
+            ) {
+                VinylsButton(
+                    icon = ImageVector.vectorResource(id = R.drawable.tomato),
+                    onClick = onClickIngressButton,
+                    type = ButtonType.WHITE,
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(48.dp)
+                )
+                Spacer(Modifier.height(10.dp))
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) { // Centra el contenido del Box
+                    Divider(
+                        color = Color.DarkGray,
+                        thickness = 5.dp,
+                        modifier = Modifier
+                            .width(70.dp)
+                            .padding(horizontal = 5.dp) // 5dp de padding a cada lado
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(5.dp))
+        }
+    }
+    // Espaciador para empujar los botones hacia abajo
+
+    // Caja para botones
 }
+
+
 
 data class CardItem(
     val imageUrl: String,
@@ -133,15 +234,4 @@ data class CardItem(
 fun StackedCardListPreview() {
     MediaPage()
 }
-fun openVideo(ctx: Context,videoUrl: String) {
 
-    val intent=Intent(Intent.ACTION_VIEW,Uri.parse(videoUrl)).apply {
-        `package`="com.google.android.youtube"
-    }
-        try {
-            ctx.startActivity(intent)
-        } catch (e:ActivityNotFoundException){
-            e.printStackTrace()
-        }
-
-}

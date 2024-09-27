@@ -1,7 +1,9 @@
 package com.example.consciente_te.pages
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +13,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.AccessAlarm
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Create
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,10 +46,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,6 +61,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.consciente_te.R
 import com.example.consciente_te.components.ButtonType
 import com.example.consciente_te.components.VinylsButton
@@ -58,24 +73,73 @@ fun HomePage(
     onClickIngressButton: () -> Unit = {},
     onClickforgetButton: () -> Unit = {}
 ) {
+    val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    Spacer(modifier = Modifier.height(60.dp))
     Column(
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        Spacer(modifier = Modifier.height(60.dp))
-        Image(
-            painter = painterResource(id = R.drawable.logo_app),
-            contentDescription = "ConscienteteLogo",
-            modifier= Modifier
-                .height(169.dp)
-                .width(277.dp)
+        VinylsButton(
+            icon = Icons.Outlined.Add,
+            onClick = { /*TODO*/ },
+            type = ButtonType.PRIMARY,
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .align(Alignment.End)
         )
-        val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
-        val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
+        Text(
+            text = "Alarmas",
+            fontSize = 30.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
+        // Caja con bordes circulares
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF758694), shape = RoundedCornerShape(15.dp))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Caja circular con la hora
+                Box(
+                    modifier = Modifier
+                        .size(240.dp, 60.dp)
+                        .background(Color(0xFFF7E7DC), shape = RoundedCornerShape(24.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "07:00 AM", color = Color(0xFF758694), fontSize = 28.sp)
+                }
+
+                // Switch deslizante
+                var isChecked by remember { mutableStateOf(false) }
+                Switch(
+                    checked = isChecked,
+                    onCheckedChange = { isChecked = it },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color(0xFFF7E7DC), // Color del "thumb" cuando está activado
+                        checkedTrackColor = Color(0xFFF7E7DC), // Color del "track" cuando está activado
+                        uncheckedThumbColor = Color(0xFFF7E7DC), // Color del "thumb" cuando está desactivado
+                        uncheckedTrackColor = Color(0xFF405D72) // Color del "track" cuando está desactivado
+                    )
+                )
+
+            }
+        }
+
+
+
+
+    /*
         Spacer(modifier = Modifier.height(50.dp))
         TextField(
             value = textStateUsername.value, // el valor del campo de texto
@@ -165,11 +229,85 @@ fun HomePage(
             label = stringResource(id = R.string.sign_up),
             type = ButtonType.TERTIARY,
 
-        )
+        )*/
+
+
 
 
 
     }
+    Column {
+        Spacer(modifier = Modifier.weight(1f))
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF758694))
+                .height(100.dp)
+                .padding(0.dp)
+        ) {
+            Spacer(Modifier.height(5.dp))
+
+            Column(
+                modifier=Modifier.width(80.dp)
+            ) {
+                VinylsButton(
+                    icon = Icons.Outlined.AccessAlarm,
+                    onClick = onClickIngressButton,
+                    type = ButtonType.WHITE,
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(48.dp)
+                        .zIndex(1f)
+                )
+                Spacer(Modifier.height(10.dp))
+
+                Box(contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxWidth()
+                ) { // Centra el contenido del Box
+                    Divider(
+                        color = Color.DarkGray,
+                        thickness = 5.dp,
+                        modifier = Modifier
+                            .width(70.dp)
+                            .padding(horizontal = 5.dp) // 5dp de padding a cada lado
+                    )
+                }
+            }
+
+            Column(
+                modifier=Modifier.width(80.dp)
+            ) {
+                VinylsButton(
+                    icon = ImageVector.vectorResource(id = R.drawable.tomato),
+                    onClick = onClickIngressButton,
+                    type = ButtonType.ALTERNATIVE,
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(48.dp)
+                )
+                Spacer(Modifier.height(10.dp))
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) { // Centra el contenido del Box
+                    Divider(
+                        color = Color.White,
+                        thickness = 5.dp,
+                        modifier = Modifier
+                            .width(70.dp)
+                            .padding(horizontal = 5.dp) // 5dp de padding a cada lado
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(5.dp))
+        }
+    }
+    // Espaciador para empujar los botones hacia abajo
+
+    // Caja para botones
+
 
 }
 

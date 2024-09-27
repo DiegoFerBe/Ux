@@ -1,7 +1,10 @@
 package com.example.consciente_te.pages
 
 import android.app.TimePickerDialog
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 
@@ -11,16 +14,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessAlarm
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,14 +54,19 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import com.example.consciente_te.R
 import com.example.consciente_te.components.ButtonType
 import com.example.consciente_te.components.VinylsButton
 import kotlinx.coroutines.launch
@@ -66,122 +79,89 @@ import java.util.Locale
 
 @Composable
 fun CreateAlarmPage(
-    onClickCancelButton: () -> Unit = {},
+
     onSaveButton: ()->Unit={}
 ) {
-    val textStateTaskName = remember { mutableStateOf(TextFieldValue()) }
-
+    val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    var isStarted by remember { mutableStateOf(false) }
+    var timeElapsed by remember { mutableStateOf(0) }
+    Spacer(modifier = Modifier.height(60.dp))
     Column(
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
-
-        ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = textStateTaskName.value, // el valor del campo de texto
-            onValueChange = { newValue ->
-                textStateTaskName.value =
-                    newValue // actualiza el valor del estado cuando cambia el texto
-            },
-            label = { Text("Task name") }, // etiqueta del campo de texto
-            textStyle = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp), // estilo del texto
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            modifier=Modifier.fillMaxWidth()
-        )
-        val state = rememberTimePickerState()
-        Spacer(modifier = Modifier.height(16.dp))
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+            .fillMaxSize().
+        background(Color(0xFF405D72))
+    ) {
+        VinylsButton(
+            icon = Icons.Outlined.Settings,
+            onClick = onSaveButton,
+            type = ButtonType.PRIMARY,
             modifier = Modifier
-                .fillMaxWidth()
-        ){
-            Text("Enter Time",modifier=Modifier.padding(8.dp))
-            Spacer(modifier = Modifier.height(20.dp))
-            TimeInput(
-                state = state,
-                modifier = Modifier.padding(16.dp)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        var selectedOption by remember { mutableStateOf(true) }
-        Row(modifier=Modifier.fillMaxWidth().height(50.dp)) {
+                .width(48.dp)
+                .height(48.dp)
+                .align(Alignment.End)
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+
+            // Centrar el contenido
+        ) {
             Column(
-                modifier=Modifier.fillMaxHeight(),
-                horizontalAlignment=Alignment.Start,
-                verticalArrangement = Arrangement.Center
+                modifier=Modifier.fillMaxWidth(),
+                // Centra horizontalmente
+                horizontalAlignment = Alignment.CenterHorizontally, // Centrar el contenido del Column
+                // Centrar verticalmente
             ) {
-                Text(text = "Alarm sound")
-            }
-            Column(modifier=Modifier.fillMaxSize(),
-                horizontalAlignment=Alignment.End,
-                verticalArrangement = Arrangement.Center) {
-                Switch(
-                    checked = selectedOption,
-                    onCheckedChange = {
-                        selectedOption = it
-                    }
-                )
+                // Círculo grande con texto "Iniciar"
 
-            }
+                Box(
+                    modifier = Modifier
+                        .size(320.dp) // Tamaño del círculo
+                        .background(
+                            if (isStarted) Color(0xFFE07A5F) else Color(0xFFF7E7DC),
+                            shape = CircleShape
+                        )
+                        .clickable {
+                            isStarted = !isStarted
+                            if (isStarted) {
+                                timeElapsed = 0
+                                // Simular incremento del tiempo (puedes agregar tu lógica de temporizador aquí)
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isStarted) "Tiempo: 25:00" else "Iniciar", // Muestra tiempo si está iniciado
+                        color = Color(0xFF405D72),
+                        fontSize = 28.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
 
-        }
-        var selectedOption2 by remember { mutableStateOf(true) }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(modifier=Modifier.fillMaxWidth().height(50.dp)) {
+                // Espacio entre el círculo y el botón
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Column(
-                modifier=Modifier.fillMaxHeight(),
-                horizontalAlignment=Alignment.Start,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Pospone")
-            }
-            Column(modifier=Modifier.fillMaxSize(),
-                horizontalAlignment=Alignment.End,
-                verticalArrangement = Arrangement.Center) {
-                Switch(
-                    checked = selectedOption2,
-                    onCheckedChange = {
-                        selectedOption2 = it
-                    }
-                )
 
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement=Arrangement.End,
-            modifier=Modifier.fillMaxWidth()
-            
-            ){
 
-            VinylsButton(
-                label = "Cancel",
-                onClick = onClickCancelButton,
-                type = ButtonType.TERTIARY,
-                modifier = Modifier.width(100.dp)
-            )
-            // Botón para confirmar la selección
-            Spacer(modifier = Modifier.width(5.dp))
-            VinylsButton(
-                label = "Save",
-                onClick =  onSaveButton ,
-                type = ButtonType.PRIMARY,
-                modifier = Modifier.width(100.dp)
-            )
-        }
+
+
 
 
 
     }
+
+
+    // Espaciador para empujar los botones hacia abajo
+
+    // Caja para botones
 }
 enum class Option {
     First, Second, Third

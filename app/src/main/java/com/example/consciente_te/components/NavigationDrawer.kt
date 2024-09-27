@@ -12,7 +12,11 @@ import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.PermMedia
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -51,10 +55,10 @@ fun NavigationDrawer(
     val scope = rememberCoroutineScope()
 
     val menus = mutableListOf(
-        NavigationItem(R.string.health_tittle,Icons.Filled.PermMedia) { navController.navigate(route = AppPages.MediaPage.route) },
-        NavigationItem(R.string.create_task,Icons.Filled.EditCalendar) { navController.navigate(route = AppPages.CreateTask.route) },
-        NavigationItem(R.string.create_alarm,Icons.Filled.AccessAlarm) { navController.navigate(route = AppPages.CreateAlarm.route) },
-        NavigationItem(R.string.list_alarms,Icons.Filled.FormatListNumbered) { navController.navigate(route = AppPages.ListAlarm.route) },
+        NavigationItem(R.string.health_tittle,Icons.Filled.Home) { navController.navigate(route = AppPages.MediaPage.route) },
+        NavigationItem(R.string.create_task,Icons.Filled.Lightbulb) { navController.navigate(route = AppPages.CreateTask.route) },
+        NavigationItem(R.string.create_alarm,Icons.Filled.Person) { navController.navigate(route = AppPages.Registry.route) },
+        NavigationItem(R.string.list_alarms,Icons.Filled.Settings) { navController.navigate(route = AppPages.ListAlarm.route) },
     )
 
     ModalNavigationDrawer(
@@ -101,7 +105,7 @@ fun NavigationDrawer(
                             }
                         },
                         type = ButtonType.TERTIARY,
-                        label = "Sign out",
+                        label = "Salir",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 64.dp, vertical = 0.dp)
