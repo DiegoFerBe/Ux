@@ -93,9 +93,7 @@ fun ConfigurarPomoPage(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
         )
-        Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
-            Text(text = "Ingresa el tiempo en minutos", color = Color.Gray, fontSize = 12.sp)
-        }
+
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -108,9 +106,7 @@ fun ConfigurarPomoPage(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
         )
-        Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
-            Text(text = "Ingresa la cantidad de pomodoros", color = Color.Gray, fontSize = 12.sp)
-        }
+       
 
         Spacer(modifier = Modifier.height(30.dp))
 
