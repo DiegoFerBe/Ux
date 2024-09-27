@@ -33,11 +33,14 @@ import com.example.consciente_te.R
 import com.example.consciente_te.components.ButtonType
 import com.example.consciente_te.components.VinylsButton
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Create
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -61,7 +64,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 @Composable
 fun RegistryPage(
     onClickCancelButton: () -> Unit = {},
-    onSignUpButton: ()->Unit={}
+    onSignUpButton: ()->Unit={},
+    sincronizarDatosButton : ()->Unit={}
 ){
     // State to control the visibility of the first and second parts of the form
     var showFirstPart by remember { mutableStateOf(true) }
@@ -75,10 +79,11 @@ fun RegistryPage(
     var selectedActivity by remember { mutableStateOf("") }
     var timeInMinutes by remember { mutableStateOf("") }
     var selectedTimeSlot by remember { mutableStateOf("") }
-
+    val activityOptions = listOf("Estudio", "Trabajo", "Lectura")
     // State for dropdown menus
     var expandedActivity by remember { mutableStateOf(false) }
     var expandedTimeSlot by remember { mutableStateOf(false) }
+    val timeSlotOptions = listOf("Diurno", "Tarde", "Nocturno")
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -95,9 +100,6 @@ fun RegistryPage(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
-                Text(text = "Ingresa tu nombre", color = Color.Gray, fontSize = 12.sp)
-            }
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -109,9 +111,7 @@ fun RegistryPage(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
-                Text(text = "Ingresa tu edad", color = Color.Gray, fontSize = 12.sp)
-            }
+
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -123,9 +123,22 @@ fun RegistryPage(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = { /* Move focus to the next field */ })
             )
-            Row(modifier = Modifier.width(277.dp), horizontalArrangement = Arrangement.Start) {
-                Text(text = "Ingresa tu profesión", color = Color.Gray, fontSize = 12.sp)
-            }
+        Row(){
+            VinylsButton(
+                label = "Sincronizar datos",
+                onClick = {},
+                type = ButtonType.TERTIARY,
+
+                )
+
+            VinylsButton(
+                label = "Sincronizar datos",
+                onClick = sincronizarDatosButton,
+                type = ButtonType.TERTIARY,
+                icon = Icons.Outlined.Email
+                )
+        }
+
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -143,37 +156,39 @@ fun RegistryPage(
             )
         } else {
 
-                // Dropdown for activity selection
-                Text("Seleccionar actividad:")
-                ExposedDropdownMenuBox(
-                    expanded = expandedActivity,
-                    onExpandedChange = { expandedActivity = !expandedActivity }
-                ) {
-                    TextField(
-                        readOnly = true,
-                        value = selectedActivity,
-                        onValueChange = { /* No-op */ },
-                        label = { Text("Seleccione una actividad") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedActivity)
-                        }
-                    )
 
-                    ExposedDropdownMenu(
+
+
+                    ExposedDropdownMenuBox(
                         expanded = expandedActivity,
-                        onDismissRequest = { expandedActivity = false }
+                        onExpandedChange = { expandedActivity = !expandedActivity }
                     ) {
-                        listOf("Estudio", "Lectura", "Trabajo").forEach { activity ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedActivity = activity
-                                    expandedActivity = false
-                                }
-                                ,text={Text(activity)}
-                            )
+                        TextField(
+                            readOnly = true,
+                            value = selectedActivity,
+                            onValueChange = {},
+                            label = { Text("Seleccionar Actividad") },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedActivity)
+                            },
+                            modifier = Modifier.menuAnchor()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedActivity,
+                            onDismissRequest = { expandedActivity = false }
+                        ) {
+                            activityOptions.forEach { color ->
+                                DropdownMenuItem(
+                                    text = { Text(color) },
+                                    onClick = {
+                                        selectedActivity = color
+                                        expandedActivity = false
+                                    }
+                                )
+                            }
                         }
                     }
-                }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -190,36 +205,35 @@ fun RegistryPage(
             Spacer(modifier = Modifier.height(16.dp))
 
                 // Dropdown for time slot selection
-                Text("Seleccionar franja:")
-                ExposedDropdownMenuBox(
+            ExposedDropdownMenuBox(
+                expanded = expandedTimeSlot,
+                onExpandedChange = { expandedTimeSlot = !expandedTimeSlot }
+            ) {
+                TextField(
+                    readOnly = true,
+                    value = selectedTimeSlot,
+                    onValueChange = {},
+                    label = { Text("Seleccionar Franja") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTimeSlot)
+                    },
+                    modifier = Modifier.menuAnchor()
+                )
+                ExposedDropdownMenu(
                     expanded = expandedTimeSlot,
-                    onExpandedChange = { expandedTimeSlot = !expandedTimeSlot }
+                    onDismissRequest = { expandedTimeSlot = false }
                 ) {
-                    TextField(
-                        readOnly = true,
-                        value = selectedTimeSlot,
-                        onValueChange = { /* No-op */ },
-                        label = { Text("Seleccione una franja") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTimeSlot)
-                        }
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = expandedTimeSlot,
-                        onDismissRequest = { expandedTimeSlot = false }
-                    ) {
-                        listOf("Diurno", "Tarde", "Nocturno").forEach { timeSlot ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedTimeSlot = timeSlot
-                                    expandedTimeSlot = false
-                                }
-                                ,text={Text(timeSlot)}
-                            )
-                        }
+                    timeSlotOptions.forEach { timeSlot ->
+                        DropdownMenuItem(
+                            text = { Text(timeSlot) },
+                            onClick = {
+                                selectedTimeSlot = timeSlot
+                                expandedTimeSlot = false
+                            }
+                        )
                     }
                 }
+            }
 
                 Spacer(modifier = Modifier.height(20.dp))
 

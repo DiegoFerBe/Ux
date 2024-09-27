@@ -14,4 +14,5 @@ sealed class AppPages(val route: String) {
     object ArtistDetailPage : AppPages(route = "artistDetail")
     object CollectorCataloguePage : AppPages(route = "collectorCatalogue")
     object CollectorDetailPage : AppPages(route = "collectorDetail")
+    object ConfigurarPomodoro : AppPages(route="configurarPomodoro")
 }

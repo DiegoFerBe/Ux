@@ -45,6 +45,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.composable
 import com.example.consciente_te.R
 import com.example.consciente_te.pages.AppPages
+import com.example.consciente_te.pages.ConfigurarPomoPage
 import com.example.consciente_te.pages.CreateAlarmPage
 import com.example.consciente_te.pages.CreateTaskPage
 import com.example.consciente_te.pages.HomePage
@@ -101,7 +102,7 @@ fun AppNavigation (
                     )
                 }
                 composable(route = AppPages.Registry.route) {
-                    viewModel.setIconMenu(null)
+                    viewModel.setIconMenu(Icons.Filled.Menu)
                     RegistryPage(
                         onClickCancelButton={
                             navController.navigate(route = AppPages.CreateAlarm.route)
@@ -110,6 +111,10 @@ fun AppNavigation (
                         onSignUpButton={
                             navController.navigate(route = AppPages.CreateAlarm.route)
                             viewModel.logIn(User.Collector)
+                        } ,
+                        sincronizarDatosButton={
+                            Toast.makeText(context,"Datos sincronizados con tu cuenta!",Toast.LENGTH_LONG).show()
+
                         }
                     )
                 }
@@ -126,6 +131,10 @@ fun AppNavigation (
                         },
                         onClickConcentrateButton={
                             navController.navigate(route = AppPages.CreateTask.route)
+                            viewModel.inRegistry(User.Guest)
+                        },
+                        onclickSettingButton={
+                            navController.navigate(route = AppPages.ConfigurarPomodoro.route)
                             viewModel.inRegistry(User.Guest)
                         }
                     )
@@ -151,7 +160,6 @@ fun AppNavigation (
                         onSaveButton={
                             navController.navigate(route = AppPages.Registry.route)
                             viewModel.logIn(User.Collector)
-                            Toast.makeText(context,"Alarm created successful",Toast.LENGTH_LONG).show()
 
                         }
                     )
@@ -164,6 +172,23 @@ fun AppNavigation (
                         }
                     )
                 }
+
+                composable(route = AppPages.ConfigurarPomodoro.route) {
+                    viewModel.setIconMenu(Icons.Filled.Menu)
+                    ConfigurarPomoPage(
+                        onClickCancelButton={
+                            navController.navigate(route = AppPages.MediaPage.route)
+                            viewModel.logIn(User.Collector)
+                        },
+                        onSignUpButton={
+                            navController.navigate(route = AppPages.MediaPage.route)
+                            viewModel.logIn(User.Collector)
+                            Toast.makeText(context,"Pomodoro configurado correctamente!",Toast.LENGTH_LONG).show()
+                        }
+                    )
+                }
+
+
 
 
 

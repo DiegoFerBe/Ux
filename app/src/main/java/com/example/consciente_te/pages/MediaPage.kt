@@ -66,7 +66,8 @@ fun MediaPage(
 
     onClickIngressButton: () -> Unit = {},
     onClickforgetButton: () -> Unit = {},
-    onClickConcentrateButton : ()->Unit={}
+    onClickConcentrateButton : ()->Unit={},
+    onclickSettingButton: ()->Unit={}
 ){
     val textStateUsername = remember { mutableStateOf(TextFieldValue()) }
     val focusManager = LocalFocusManager.current
@@ -81,7 +82,7 @@ fun MediaPage(
     ) {
         VinylsButton(
             icon = Icons.Outlined.Settings,
-            onClick = onClickforgetButton,
+            onClick = onclickSettingButton,
             type = ButtonType.PRIMARY,
             modifier = Modifier
                 .width(48.dp)

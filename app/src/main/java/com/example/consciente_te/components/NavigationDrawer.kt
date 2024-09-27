@@ -58,7 +58,8 @@ fun NavigationDrawer(
         NavigationItem(R.string.health_tittle,Icons.Filled.Home) { navController.navigate(route = AppPages.MediaPage.route) },
         NavigationItem(R.string.create_task,Icons.Filled.Lightbulb) { navController.navigate(route = AppPages.CreateTask.route) },
         NavigationItem(R.string.create_alarm,Icons.Filled.Person) { navController.navigate(route = AppPages.Registry.route) },
-        NavigationItem(R.string.list_alarms,Icons.Filled.Settings) { navController.navigate(route = AppPages.ListAlarm.route) },
+        NavigationItem(R.string.list_alarms,Icons.Filled.Settings) { navController.navigate(route = AppPages.ConfigurarPomodoro.route) },
+
     )
 
     ModalNavigationDrawer(
